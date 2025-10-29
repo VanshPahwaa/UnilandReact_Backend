@@ -1,0 +1,13 @@
+ <form action="<%=data.currentUrl%>" class="banner-search-form quick-search form-icon-right position-relative px-3 " method="get">
+                                <div class="d-flex gap-1 p-0">
+                                    <div class="field-search field-icon flex-grow-1">
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <input type="text" class="form-control" name="q" placeholder="Enter Keywords..." value="<%=data.searchedValue && data.searchedValue.q?data.searchedValue.q:""%>">
+                                        </div>
+                                    </div>
+                                    <div class="field-search">
+                                        <button class="btn btn-primary hover-flash-move w-100">Search</button>
+                                    </div>
+                                </div>
+                            </div>

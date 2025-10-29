@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords"
+        content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+
+    <base href="../">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+    <!-- toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/jodit@latest/es2021/jodit.fat.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+</head>
+
+<body class="dashboard-message">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+               <%- include("../partials/dashboard-navbar")%>
+
+                <div class="right-sidebar-block">
+                    <!--============== Dashboard Start ==============-->
+             <%- include("../partials/headerDashboard.ejs")%>
+
+                 
+             <div class=" container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-title-wrapper d-lg-flex flex-column gap-3">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                                         <li class="breadcrumb-item"><a href="admin/properties-list">Property</a></li>
+
+                                        <li class="breadcrumb-item active" aria-current="">New Property</li>
+                                    </ol>
+                                </nav>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                    <div class="full-row p-3">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 d-flex flex-row justify-content-between">
+
+                                    <h3 class="py-3 color-dark d-inline-block">Submit Property</h3>
+                                     
+                                </div>
+                                <div>
+                                   
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-12">
+                                    <form class="submit-property " action="http://localhost:8080/backend/property/" id="myForm"
+                                        method="post" enctype="multipart/form-data">
+
+                                        <div class="row g-3 px-2">
+                                            
+                                            <div class="col-md-12">
+                                                <label class="mb-1">Property Title</label>
+                                                <input class="form-control" name="title" type="text" required
+                                                    placeholder="Property Name">
+
+                                                
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="mb-1">Description</label>
+                                                <textarea class="form-control" rows="5" id="jodit-editor" required name="description"
+                                                    placeholder="Property Details"></textarea>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="mb-1">Property Types</label>
+                                                <select class="form-select" name="propertyType" required>
+
+                                                    <option value="" disabled selected hidden>Select Types</option>
+                                                    <%data.propertyType.forEach((propertyType,index)=>{%>
+                                                        <option value="<%=propertyType%>">
+                                                            <%=propertyType%>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+
+
+
+
+                                            <div class="col-md-6">
+                                                <label class="mb-1">Year Of Construction</label>
+                                                <select class="form-select" name="yearOfConstruction" required>
+
+                                                    <option value="" disabled selected hidden>Select Year Of Construction</option>
+                                                    <%data.yearOfConstruction.forEach((year,index)=>{%>
+                                                        <option value="<%=year%>">
+                                                            <%=year%>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="mb-1">Area From (sqft)</label>
+                                                <input class="form-control" id="area" name="areaFrom" type="number" min="0"
+                                                    required placeholder="Property Area">
+                                            </div>
+                                              <div class="col-md-6">
+                                                <label class="mb-1">Area To (sqft)</label>
+                                                <input class="form-control" id="area" name="areaTo" type="number" min="0"
+                                                    required placeholder="Property Area">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="mb-1">Property Stage</label>
+                                                <select class="form-select" name="propertyStage" required>
+                                                    <option value="" disabled selected hidden>Select Property Stage</option>
+                                                   <%data.propertyStage.forEach((stage,index)=>{%>
+                                                        <option value="<%=stage%>">
+                                                            <%=stage%>
+                                                        </option>
+                                                        <%})%>
+                                                </select>
+
+                                                
+                                            </div>
+
+                                             <div class="col-md-6">
+                                                <label class="mb-1">Location</label>
+                                                <select class="form-select" name="location" required>
+                                                    <option value="" disabled selected hidden>Select Status</option>
+                                                    <%data.location.map((loc,index)=>{%>
+                                                        <option value="<%=loc._id%>"><%=loc.locationName%></option>
+                                                        <%})%>
+                                                </select>
+                                            </div>
+
+                                             <div class="col-md-6">
+                                                <label class="mb-1">Listing Status</label>
+                                                <select class="form-select" name="listingStatus" required>
+                                                    <option value="" disabled selected hidden>Select Types</option>
+                                                    <option>Published</option>
+                                                    <option>Unpublished</option>
+                                                </select>
+                                            </div>
+
+                                              <div class="col-md-6">
+                                                <label class="mb-1">Builder / Owner Name</label>
+                                                <input class="form-control" id="builderName" name="builderName"
+                                                    type="text" placeholder="Builder Name" required>
+                                            </div>
+
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <label class="mb-1">Property Status</label>
+                                                    <select class="form-select" name="propertyStatus"
+                                                        id="propertyStatus" required>
+                                                        <option value="" disabled selected hidden>Property Status
+                                                        </option>
+                                                        <%data.propertyStatus.forEach((propertyStatus,index)=>{%>
+                                                            <option value="<%=propertyStatus%>">
+                                                                <%=propertyStatus%>
+                                                            </option>
+                                                            <%})%>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- rent specific -->
+                                            <div class="col-md-6 rent-fields d-none">
+                                                <label class="mb-1">Rent/Monthly (INR)</label>
+                                                <input class="form-control" id="rent" name="rent" min="0" type="number"
+                                                    placeholder="Rent/monthly">
+                                            </div>
+
+                                            <!-- sale specific -->
+                                            <!-- <div class="col-md-6 sale-fields d-none">
+                                                <label class="mb-1">Price per sq. ft.(INR)</label>
+                                                <input class="form-control" id="pricePerSqFt" min="0"
+                                                    name="pricePerSqFt" type="number" placeholder="Property Price">
+                                            </div> -->
+
+                                            <div class="col-md-6 sale-fields d-none">
+                                                <label class="mb-1">Price From (INR)</label>
+                                                <input class="form-control" id="priceFrom" name="priceFrom" min="0"
+                                                    type="number" placeholder="Price Starting">
+                                            </div>
+                                              <div class="col-md-6 sale-fields d-none">
+                                                <label class="mb-1">Price To (INR)</label>
+                                                <input class="form-control" id="priceTo" name="priceTo" min="0"
+                                                    type="number" placeholder="Price To">
+                                            </div>
+                                              <div class="col-md-6 sale-fields d-none">
+                                                <label class="mb-1">Price From (Words)</label>
+                                                <input class="form-control" id="priceFrom" name="priceFromInWords" min="0"
+                                                    type="text" placeholder="Price Starting">
+                                            </div>
+                                              <div class="col-md-6 sale-fields d-none">
+                                                <label class="mb-1">Price To (Words)</label>
+                                                <input class="form-control" id="priceTo" name="priceToInWords" min="0"
+                                                    type="text" placeholder="Price To">
+                                            </div>
+
+
+                                          
+
+                                            <h6 class="mb-1">Images</h6>
+
+                                            <div class="mb-3">
+                                                <label for="fileUpload" class="form-label">Main Image</label>
+                                                <!-- Custom upload button -->
+                                                <input class="form-control d-none" name="imageUrl" type="file"
+                                                    id="fileUpload" accept="image/*" required>
+
+
+                                                <!-- Frame for image preview -->
+                                                <div class="mt-3">
+                                                    <img id="previewFrame"
+                                                        src="assets/images/selfAdded/default-image.png"
+                                                        alt="Preview will appear here" class="border rounded"
+                                                        style="width:150px; height:150px; object-fit:cover; display:block;">
+                                                </div>
+                                                <label for="fileUpload" class="btn btn-outline-primary mt-2">Choose
+                                                    Image</label>
+                                                <span id="placeholderText" class="text-danger">No image selected</span>
+                                            </div>
+
+
+
+                                        <div class=" colo-12 mb-3">
+                                                <label for="secondaryImage" class="form-label">Cover Images</label>
+
+                                                <!-- Hidden input file (triggered by custom button) -->
+                                                <input 
+                                                    class="form-control d-none" 
+                                                    name="secondaryImageUrl" 
+                                                    type="file"
+                                                    id="secondaryImage" 
+                                                    accept="image/*"  
+                                                    multiple
+                                                >
+
+                                                <!-- Frame for image preview -->
+                                                <div class="mt-3 d-flex justify-content-start align-items-center flex-wrap p-2"
+                                                    style="width: 100%; min-height: 15vh; background-color: rgb(224, 219, 219);" 
+                                                    id="secondaryImageContainer">
+                                                    <span class="d-inline-block text-center w-100" id="messageForImageContainer">
+                                                        No images selected
+                                                    </span>
+                                                </div>
+
+                                                <!-- Custom upload button -->
+                                                <label for="secondaryImage" class="btn btn-outline-primary mt-2">Choose Images</label>
+                                            </div>
+
+                                             <div class="col-12 mt-4">
+                                                      <label class="mb-1">Video URL</label>
+                                                <input class="form-control" id="videoUrl"
+                                                    name="videoUrl" type="url" 
+                                                    placeholder="URL">
+                                            </div>
+
+                                            <div class="col-12">
+                                                <h6 class="mb-1">Amenities</h6>
+                                                </br>
+                                                <div class="container">
+
+                                                    <div class=" row gap-3">
+                                                        <%data.amenities.map((amenity,index)=>{%>
+                                                            <div class="form-check col-2">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                id="amenity<%=amenity.name%>" name="amenities[]"
+                                                                value="<%=amenity._id%>">
+                                                                <label class="form-check-label"
+                                                                for="amenity<%=amenity.name%>">
+                                                                <%=amenity.name%>
+                                                            </label>
+                                                        </div>
+                                                        <%})%>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="w-100"></div>
+
+                                            <div class=" row">
+                                                <h6 class="mb-1">Address</h6>
+                                                <br>
+                                                <div class="col-md-6">
+                                                    <label class="mb-1">House/Office/Unit No.</label>
+                                                    <input class="form-control" id="unit" name="address[unit]"
+                                                        type="number" required placeholder="Unit No.">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="mb-1">Street</label>
+                                                    <input class="form-control" id="street" name="address[street]"
+                                                        type="text" required placeholder="street">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="mb-1">City/Town</label>
+                                                    <input class="form-control" id="city" name="address[city]"
+                                                        type="text" required placeholder="City">
+
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="mb-1">District</label>
+                                                    <input class="form-control" id="district" name="address[district]"
+                                                        type="text" required placeholder="District">
+
+                                                </div>
+
+
+                                                <div class="col-md-6">
+                                                    <label class="mb-1">State</label>
+                                                    <input class="form-control" id="state" name="address[state]"
+                                                        type="text" required placeholder="State">
+                                                </div>
+
+
+                                                <div class="col-md-6">
+                                                    <label class="mb-1">Pincode</label>
+                                                    <input class="form-control" id="pincode" name="address[pincode]"
+                                                        type="number" required placeholder="Pincode" min="100000"
+                                                        max="999999">
+                                                </div>
+                                            </div>
+
+                                            <h6 class="">Additional Information</h6>
+                                            <div class="col-md-6">
+                                                <label class="mb-1">Apartment Size(BHK)</label>
+                                                <select class="form-select" name="additionalInformation[rooms]"
+                                                    required>
+                                                    <option value="" disabled selected hidden>Select Number of Rooms
+                                                    </option>
+                                                    <option value="1">1 BHK</option>
+                                                    <option value="2">2 BHK</option>
+                                                    <option value="3">3 BHK</option>
+                                                    <option value="4">4 BHK</option>
+                                                    <option value="5">5 BHK</option>
+                                                    <option value="6">6 BHK</option>
+                                                    <option value="7">7 BHK</option>
+                                                    <option value="8">8 BHK</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="mb-1">Bathrooms</label>
+                                                <select class="form-select" name="additionalInformation[bathrooms]"
+                                                    required>
+                                                    <option value="" disabled selected hidden>Select Number of Bathrooms
+                                                    </option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="4">5</option>
+                                                    <option value="4">6</option>
+                                                </select>
+                                            </div>
+
+
+
+                                            <div class="row mt-3" id="floorPlanContainer">
+                                                <label>Floor Plan</label>
+                                                <!-- First row (index 0) -->
+                                                <div class="floor-plan-row row mt-2">
+                                                    <div class="col-md-4">
+                                                        <input class="form-control"
+                                                            name="additionalInformation[floorPlan][0][floor]"
+                                                            type="number" placeholder="Floor">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input class="form-control"
+                                                            name="additionalInformation[floorPlan][0][description]"
+                                                            placeholder="Description" required>
+
+
+                                                    </div>
+                                                </div>
+
+                                                <!-- Button always stays at bottom -->
+                                                <div class="col-md-12 mt-3">
+                                                    <a type="button" class="add-data-row-floor-plan btn-text text-dark">
+                                                        + Add New Row
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-3 " id="nearByPlaceContainer">
+                                                <label class="mb-1">Near By Place</label><br>
+                                                <div class="col-md-4">
+                                                    <input type="text"
+                                                        name="additionalInformation[nearByPlace][0][placeName]"
+                                                        class="form-control" placeholder="Name of the place" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="number" required
+                                                        name="additionalInformation[nearByPlace][0][distance]"
+                                                        class="form-control" placeholder="Distance (km)">
+                                                </div>
+                                                <div class="col-md-12 mt-3">
+                                                    <a href="" class="add-data-row btn-text text-dark">+ Add New Row</a>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary mt-4">Save Data</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--============== End Dashboard Start ==============-->
+
+                    <!--============== Footer Start =============-->
+                    <%- include("../partials/copyright.ejs")%>
+                        <!--============== Footer End =============-->
+                </div>
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/submit-property.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <!-- for toastify -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/jodit@latest/es2021/jodit.fat.min.js"
+    ></script>
+    <script>
+      Jodit.make('#jodit-editor',{
+        height:350,
+        buttons: [
+    'source', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
+    'ul', 'ol', '|', 'outdent', 'indent', '|', 'image', 'link'
+  ],
+   uploader: {
+    insertImageAsBase64URI: true,
+     url: '/upload' 
+  }
+      });
+    </script>
+    
+    <script>
+
+
+        // can be used for future use in displaying custom messaage in case it is not validated 
+        // (function () {
+        //     'use strict'
+
+        //     const forms = document.querySelectorAll('.needs-validation')
+
+        //     Array.from(forms).forEach(function (form) {
+        //         form.addEventListener('submit', function (event) {
+        //             if (!form.checkValidity()) {
+        //                 event.preventDefault()
+        //                 event.stopPropagation()
+        //             }
+        //             form.classList.add('was-validated')
+        //         }, false)
+        //     })
+        // })()
+
+
+    </script>
+</body>
+
+</html>

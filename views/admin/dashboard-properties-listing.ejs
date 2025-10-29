@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords" content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+    <base href="../">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->	
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        .pagination .page-item.disabled .page-link {
+                     /* lighter text */
+            pointer-events: none; /* no clicking */
+            background-color: #f5f5f5; /* light gray bg */
+            border-color: #ddd;   /* lighter border */
+            opacity: 0.6;         /* faded look */
+            }
+
+    </style>
+
+</head>
+<body class="dashboard-message">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+            <%- include("../partials/dashboard-navbar")%>
+                
+            <!-- main section -->   
+            <div class="right-sidebar-block">
+                <!--============== Header Section Start ==============-->
+             
+                            <%- include("../partials/headerDashboard.ejs")%>
+
+                 
+             <div class=" container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-title-wrapper d-lg-flex flex-column gap-3">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="">Property</li>
+                                    </ol>
+                                </nav>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--============== Header Section End ==============-->
+
+                <!--============== Dashboard Start ==============-->
+                <div class="full-row p-3">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-12 d-flex justify-content-between ">
+                                <h4 class="mb-3 color-dark">My Property Listing</h4>
+                                  <a  href="admin/new-property" class="text-decoration-none " id="add-new-property">
+                                        <span class="fw-medium  text-white d-inline-block btn btn-primary">Add New Property+</h6>
+                                    </a>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 p-0 m-0">
+                                <%- include("../partials/searchBar.ejs")%>
+                            </div>
+                            <div class="col-12">
+                                <div class="dashboard-panel border bg-white rounded overflow-hidden w-100">
+                                    <div class="overflow-x-scroll font-fifteen">
+                                        <%if(data.property && data.property.length>0){%>
+                                           
+                                        <table class="w-100 items-list bg-transparent">
+                                            <thead>
+                                                <tr>
+                                               <th>Sr. No.</th>
+                                                    <th>Properties</th>
+                                                    <th>Price</th>
+                                                    <th>Property Type</th>
+                                                    <th>Property Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%data.property.forEach((property,index)=>{%>
+                                               <tr>
+                                                <td>
+                                                        <div class="db-comments-author">
+                                                                <span><%=(index+1)+(data.limit*(data.pagination.currentPage-1))%></span>
+                                                            </div>
+                                                        </td>
+                                                    <td>
+                                                        <img src="<%=property.imageUrl%>" style="height:6vh" alt="">
+                                                        <div class="property-info">
+                                                            <h5 class="property-title"><%=property.title%></h5>
+                                                            <span><i class="fas fa-map-marker-alt"></i> <%=property.address.unit%>, <%=property.address.street%>, <%=property.address.city%>, <%=property.address.district%>, <%=property.address.state%>, <%=property.address.pincode%></span>
+                                                        </div>
+                                                    </td>
+                                                        <td>
+                                                        <span class="price">
+                                                            ₹<%= property.priceFrom ? property.priceFrom + " - ₹" + property.priceTo : property.rent %>
+                                                        </span>
+                                                        </td>
+                                                   
+                                                    
+                                                    <td><%=property.propertyType%></td>
+                                                    <td> <%=property.propertyStatus%>
+                                                    </td>
+                                                    <td>
+                                                        <div class="list-action">
+                                                            <a href="admin/edit-property/<%=property._id%>"><i class="fas fa-edit"></i></a>
+                                                            <!-- <a href=""><i class="fas fa-trash"></i></a> -->
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                 <%})%>
+                                            </tbody>
+                                        </table>
+
+                                         <%}else{%>
+                                        <h3 class="text-center p-5">No Properties Found</h3>
+                                            <%}%>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                             <%- include("../partials/tablePagination.ejs")%>
+                             <!-- tablePagination contains the extra div for div above the searchBar so don't need to put div for one above the searchBar partials -->
+                        <!-- </div> -->
+                    </div>
+                </div>
+                <!--============== End Dashboard Start ==============-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+</body>
+</html>

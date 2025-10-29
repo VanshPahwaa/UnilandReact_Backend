@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords" content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->	
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+
+</head>
+<body class="dashboard-main">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+            <div class="left-sidebar-block bg-dark p-0">
+                <div class="dashboard-logo">
+                   <h4 class="logo">Admin Panel</h4>
+                </div>
+                <nav class="dashboard-nav nav-light pb-3" id="navbarSupportedContent">
+                    <ul class="navbar-nav left-collaps-nav">
+                        <h5 class="dashboard-nav-title">Overview</h5>
+                        <%%>
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fa-solid fa-layer-group"></i> Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="dashboard-message.html"><i class="fa-solid fa-envelope"></i> Message</a></li>
+                        <h5 class="dashboard-nav-title">Manage Listing</h5>
+                        <li class="nav-item db-dropdown">
+                            <a class="nav-link dropdown-toggle" href="#"><i class="fa-solid fa-house"></i> My Properties</a>
+                            <ul class="db-dropdown-menu">
+                                <li class="nav-item"><a class="nav-link" href="dashboard-listing.html">General Listing</a></li>
+                                <li class="nav-item"><a class="nav-link" href="dashboard-element-listing.html">Element Listing</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Management</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="dashboard-favorite.html"><i class="fa-solid fa-heart"></i> My Favorite</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/admin/add-property"><i class="fa-solid fa-paper-plane"></i> Submit Property</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/admin/agents"><i class="fa-solid fa-user"></i> Agents</a></li>
+                        <h5 class="dashboard-nav-title">Account Settings</h5>
+                        <li class="nav-item"><a class="nav-link" href="dashboard-profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="dashboard-profile-settings.html"><i class="fa-solid fa-wrench"></i> Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="right-sidebar-block">
+                <!--============== Header Section Start ==============-->
+             
+                <!--============== Header Section End ==============-->
+
+                <!--============== Dashboard Start ==============-->
+                
+                <%-body%>
+                <!--============== End Dashboard Start ==============-->
+
+                <!--============== Footer Start =============-->
+                <div class="full-row py-3 mt-auto">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 text-center"><span>© 2025 Uniland All right reserved</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!--============== Footer End =============-->
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script>
+        // Statistic
+        if (document.querySelector('#mychart') !== null) {
+            var ctx = document.getElementById("mychart").getContext('2d');
+
+            // Data with datasets options
+            var data = {
+                type: 'line',
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+                datasets: [{
+                    label: 'Growth',
+                    fill: true,
+                    backgroundColor: "transparent",
+                    borderColor: "#17c788",
+                    data: [0, 150, 450, 400, 480, 630, 580, 500, 530, 400, 430, 600, 400],
+                }]
+            }
+
+            // Chart declaration with some options:
+            var mychart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+            });
+        }
+    </script>
+</body>
+</html>

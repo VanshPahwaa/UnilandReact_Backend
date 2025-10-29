@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords" content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->	
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+       
+    </style>
+
+</head>
+<body class="dashboard-main">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+         <%- include("../partials/dashboard-navbar")%>
+         <!-- main section -->
+            <div class="right-sidebar-block " id="dashboard-body">
+                <!--============== Header Section Start ==============-->
+                  <%- include("../partials/headerDashboard.ejs")%>
+
+                <div class="full-row p-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="page-title-wrapper d-lg-flex flex-column gap-1">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb bg-transparent p-0">
+                                    <li class="breadcrumb-item active"><a href="/admin">Dashboard</a></li>
+                                </ol>
+                            </nav>
+                            <!-- <h1 class="page-title">Sell</h1> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <!--============== Header Section End ==============-->
+                      
+
+                <!--============== Dashboard Start ==============-->
+                <div class="full-row p-3">
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="mb-3 color-dark">Dashboard</h5>
+                             
+                            </div>
+                        </div>
+                        <div class="row row-cols-xl-4 row-cols-lg-2 row-cols-1 g-3 mb-4">
+                           
+                            <a href="admin/properties-list">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4 " style="background-color: #09442f;">
+                                    <div class="entry-wrapper rounded">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail"><span class="unicode-house-1"></span></div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+
+                                                    <!-- <span class="counter-num"><%=//data.propertyDetails.total%>  </span> -->
+                                                    
+                                                    <h5 class="counter-title"> Properties</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+ <a href="admin/leads">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4" style="background-color: #0acf87;">
+                                    <div class="entry-wrapper">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail"><i class="fa-solid fa-briefcase fa-3x" style="color:white"></i></div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+                                                <!-- <span class="counter-num"><%=data.leadDetails.total%>  </span> -->
+
+                                                <h5 class="counter-title">Leads</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             </a>
+
+                        <a href="admin/locations">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4" style="background-color: #9d48ac;">
+                                    <div class="entry-wrapper">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail"><svg xmlns="http://www.w3.org/2000/svg" height="45px" width="40px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg></div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+                                                <span class="counter-num"></span>
+                                                <h5 class="counter-title">Locations</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+  <%if(user.role=="admin"){%>
+                          <a href="admin/agents">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4" style="background-color: #c79b18;">
+                                    <div class="entry-wrapper">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail">
+                                                <svg xmlns="http://www.w3.org/2000/svg" height="45px" width="40px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M744-408v-252L552-799 360-659.7v59.7h-72v-96l264-192 264 191v289h-72ZM552-799Zm18 163h36v-36h-36v36Zm-72 0h36v-36h-36v36Zm72 72h36v-36h-36v36Zm-72 0h36v-36h-36v36ZM288-228l264 81 235-72q-8-21-26.39-33-18.38-12-41.61-12H508q-17 0-34-2.5t-33-8.5l-68-26 22-69 70 26q11 4 21.5 6t21.5 2h92q0-10-5-17t-15-11l-256-92h-36v228ZM48-96v-432h274q8 0 15 1.5t13.55 3.61L607-431q30 11 47.5 37.25T672-336h47q60.42 0 102.71 42Q864-252 864-192v24L553-72l-265-81v57H48Zm72-72h96v-288h-96v288Z"/></svg>
+
+                                            
+                                            </div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+                                                 <span class="counter-num"></span>
+                                                <h5 class="counter-title">Agents</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </a>
+                            <%}%>
+
+                            <a href="admin/amenities">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4" style="background-color: #8f3c3c;">
+                                    <div class="entry-wrapper">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail">
+ <i  class="fa-solid fa-heart fa-3x" style="color: white;"></i>                                            </div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+                                                <span class="counter-num"></span>
+                                                <h5 class="counter-title">Amenities</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        
+                         <a href="admin/banks">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4" style="background-color: #9d48ac;">
+                                    <div class="entry-wrapper">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail">
+<i class="fa-solid fa-building-columns fa-3x" style="color:white"></i>                                            </div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+                                                <span class="counter-num"></span>
+                                                <h5 class="counter-title">Banks</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="admin/appointments">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4" style="background-color: #9d48ac;">
+                                    <div class="entry-wrapper">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail">
+<i class="fa-solid fa-calendar-check fa-3x" style="color:white"></i>                                            </div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+                                                <span class="counter-num"></span>
+                                                <h5 class="counter-title">Appointments</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+
+                         <a href="admin/customerData">
+                            <div class="col">
+                                <div class="counter-style-2 rounded-4" style="background-color: #9d48ac;">
+                                    <div class="entry-wrapper">
+                                        <div class="entry-thumbnail-wrapper">
+                                            <div class="entry-thumbnail">
+<i class="fa-solid fa-user fa-3x " style="color:white"></i>                                             </div>
+                                        </div>
+                                        <div class="entry-content-wrapper">
+                                            <div class="entry-header">
+                                                <span class="counter-num"></span>
+                                                <h5 class="counter-title">Customer Data</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                       
+</div>
+                </div>
+                <!--============== End Dashboard Start ==============-->
+
+                <!--============== Footer Start =============-->
+                <div class="full-row py-3 mt-auto">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 text-center"><span>© 2025 Uniland All right reserved</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!--============== Footer End =============-->
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+ 
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+
+    <script>
+        // Statistic
+        if (document.querySelector('#mychart') !== null) {
+            var ctx = document.getElementById("mychart").getContext('2d');
+
+            // Data with datasets options
+            var data = {
+                type: 'line',
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+                datasets: [{
+                    label: 'Growth',
+                    fill: true,
+                    backgroundColor: "transparent",
+                    borderColor: "#17c788",
+                    data: [0, 150, 450, 400, 480, 630, 580, 500, 530, 400, 430, 600, 400],
+                }]
+            }
+
+            // Chart declaration with some options:
+            var mychart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+            });
+        }
+    </script>
+</body>
+</html>

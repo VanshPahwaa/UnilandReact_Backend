@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords" content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+    <base href="../">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->	
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+    <style>
+        .pagination .page-item.disabled .page-link {
+                       /* lighter text */
+            pointer-events: none; /* no clicking */
+            background-color: #f5f5f5; /* light gray bg */
+            border-color: #ddd;   /* lighter border */
+            opacity: 0.6;         /* faded look */
+            }
+
+    </style>
+
+</head>
+<body class="dashboard-message">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+            <%- include("../partials/dashboard-navbar")%>
+                
+            <!-- main section -->   
+            <div class="right-sidebar-block">
+                <!--============== Header Section Start ==============-->
+               <%- include("../partials/headerDashboard.ejs")%>
+
+                 
+             <div class=" container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-title-wrapper d-lg-flex flex-column gap-3">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="/admin/leads">Leads</a></li>
+                                        <li class="breadcrumb-item active" aria-current=""><%=data.pageTitle%></li>
+                                    </ol>
+                                </nav>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 
+                <!--============== Header Section End ==============-->
+
+                <!--============== Dashboard Start ==============-->
+                <div class="full-row p-3">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-12 d-flex justify-content-between ">
+                                <h4 class="mb-3 color-dark">Open Leads</h4>
+                                  <!-- <a  href="admin/new-property" class="text-decoration-none " id="add-new-property">
+                                        <span class="fw-medium  text-white d-inline-block btn btn-primary">Add New Property+</h6>
+                                    </a> -->
+                            </div>
+                        </div>
+                        <div class="row">
+
+                       <div class="col-12 p-0 m-0">
+                                <%- include("../partials/searchBar.ejs")%>
+                            </div>
+                        
+                       <div class="row">
+                            <div class="col-12">
+                                <div class="dashboard-panel border bg-white rounded overflow-hidden w-100">
+                                    <div class="overflow-x-scroll font-fifteen">
+                                        <%if(data && data.lead && data.lead.length>0){%>
+                                           
+                                        <table class="w-100 items-list bg-transparent">
+                                            <thead>
+                                                 <tr>
+                                                    <th>Sr. No.</th>
+                                                    <th>Enquirer Details</th>
+                                                    <th>Interested </th>
+                                                    <th>Assign</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%data.lead.forEach((lead,index)=>{%>
+                                               <tr  data-lead-id="<%=lead._id%>">
+                                                            <td><%=(index+1)+(data.limit*(data.pagination.currentPage-1))%></td>
+                                                    <td>
+                                                    <div>
+                                                    <span><%=lead.clientName%></span><br>
+                                                    <!-- <span><%=lead.email%></span><br>
+                                                    <span><%=lead.mobileNumber%></span> -->
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                    <h6><%=lead.leadType%></h6>
+                                                    <%if(lead.propertyInterested){%>
+                                                        <a href="http://localhost:8080/front-property/<%=lead.propertyInterested%>"> <i class="fa-solid fa-up-right-from-square"></i>    View Property</a>
+                                                        <%}%>
+                                                    </div>
+                                                </td>
+                                                  <td>
+                                                    <%=lead.assigned?lead.assigned.userName:"Still Need to Assign"%>
+                                                  </td>
+                                                    <td> <%=lead.leadStatus%>
+                                                    </td>
+                                                    <td>
+                                                        <div class="list-action">
+                                                            <a href="admin/edit-lead/<%=lead._id%>"><i class="fas fa-edit"></i></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                 <%})%>
+                                            </tbody>
+                                        </table>
+
+                                         <%}else{%>
+                                        <h3 class="text-center p-5">No Found</h3>
+                                            <%}%>
+                                    </div>
+                                </div>
+                                
+                                     </div>
+                        </div>
+                                <%- include("../partials/tablePagination.ejs")%>
+                    </div>
+                </div>
+                <!--============== End Dashboard Start ==============-->
+
+                <!--============== Footer Start =============-->
+                    <%- include("../partials/copyright.ejs")%>
+                <!--============== Footer End =============-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+</body>
+</html>

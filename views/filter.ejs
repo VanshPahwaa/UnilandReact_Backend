@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords" content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->	
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <style>
+
+        input[type=number]::-webkit-inner-spin-button,
+            input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+            }
+
+   input[name="mobileNumber"]{
+            border:none;
+            outline: none;
+        }
+        input[name="mobileNumber"]:hover{
+            border:none;
+            box-shadow: none;
+            outline:none;
+        }
+
+   .compare-checkbox {
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.compare-checkbox input[type="checkbox"] {
+    /* display: none;  */
+    color: yellow;
+    background: yellow;
+}
+
+.compare-checkbox input[type="checkbox"]:checked {
+    color: rgb(26, 27, 26); /* or any style to indicate checked */
+    transform: scale(1.2);
+}
+
+.propertyCard:hover{
+    transition-property: all;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+    transform: scale(1.03);
+
+}
+
+.content-block{
+    width:100%;
+}
+
+   </style>
+
+</head>
+<body>
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <!--============== Header Section Start ==============-->
+       <header class="main-header  bg-white" style="z-index: -100 !important;">
+            <%- include("partials/navbar.ejs")%>
+            <%- include("partials/lead-model.ejs")%>
+        </header>
+        <!--============== Header Section End ==============-->
+
+        <!--============== Page Banner Section Start ==============-->
+        <div class="full-row inner-page-banner pt-3 pt-md-5 pb-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="page-title-wrapper d-lg-flex flex-column gap-3">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Advance Search</li>
+                                </ol>
+                            </nav>
+                            <h1 class="page-title">Advance Search Filter</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--============== Page Banner Section End ==============-->
+
+        <!--================ Advance Filter Start =================-->
+        <div class="secondary-nav-leftside nav-leftpush-overlay" >
+            <div class="navbar-expand-lg">
+                <div class="navbar-slide-push bg-dark" style="z-index: 1500 !important;">
+                    <span class="slide-nav-close  font-primary ls-2 fw-semibold"><i class="fa-solid fa-xmark"></i> Hide Filter</span>
+                  <form action="/backend/property/filter" method="GET" id="filterForm"
+                    class="quick-search slide-filter form-icon-right position-relative pb-5 p-2">
+                    <div class="row">
+
+                        <!-- TODO add dropdown from locations -->
+                        <div class="col-12 mb-2">
+                            <label class="mb-1"><h6 class="color-white fs-5 text-uppercase ls-2 fw-semibold ">Location</h6></label>
+                    </div>
+                        <div class="col-12 mb-3">
+                            <div class="position-relative">
+                                <!-- <input type="text" class="form-control" name="location" placeholder="Location"> -->
+                                <i class="flaticon-placeholder flat-mini icon-font y-center text-dark"></i>
+
+                                <select class="form-select text-dark" name="location"  >
+                                                    <option value="" disabled selected hidden>Select Status</option>
+                                                    <%data.location.map((loc,index)=>{%>
+                                                        <option class="text-dark" value="<%=loc._id%>"><%=loc.locationName%></option>
+                                                        <%})%>
+                                                </select>
+                            </div>
+                        </div>
+                        <%if(data && data.propertyType.length>0){%>
+                            <div class="col-12 mb-2 ">
+                                <h6 class=" color-white fs-6 text-uppercase ls-2 fw-semibold">Property Type</h6>
+                            </div>
+
+                            <div class="col-12 mb-3 gap-3">
+                                <ul class="select-custom">
+                                    <%data.propertyType.forEach((type,index)=>{%>
+                                        <li>
+                                            <input type="checkbox" class=""  name="propertyType" value="<%=type%>"
+                                                id="property-type-<%=index%>" hidden="">
+                                            <label for="property-type-<%=index%>" class="select-btn">
+                                                <%=type%>
+                                            </label>
+                                        </li>
+                                        <%})%>
+                                </ul>
+                            </div>
+                            <%}%>
+
+                                <%if(data && data.propertyStage.length>0){%>
+                                    <div class="col-12 mb-2">
+                                        <h6 class=" fs-6 color-white text-uppercase ls-2 fw-semibold">Property Stage</h6>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <ul class="select-custom">
+                                            <% data.propertyStage.map((stage,index)=>{%>
+
+                                                <li>
+                                                    <input type="checkbox" name="propertyStage"
+                                                        value="<%=stage%>"
+                                                        id="property-stage-<%=index+8%>" hidden="">
+                                                    <label for="property-stage-<%=index+8%>" class="select-btn">
+                                                        <%=stage%>
+                                                    </label>
+                                                </li>
+                                                <%})%>
+                                        </ul>
+                                    </div>
+                                        <%}%>
+
+
+                                <%if(data && data.propertyStatus.length>0){%>
+                                    <div class="col-12 mb-2">
+                                        <h6 class="fs-6 color-white text-uppercase ls-2 fw-semibold">Property Status</h6>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <ul class="select-custom">
+                                            <% data.propertyStatus.map((propertyStatus,index)=>{%>
+
+                                                <li>
+                                                    <input type="checkbox" name="propertyStatus"
+                                                        value="<%=propertyStatus%>"
+                                                        id="property-status-<%=index+8%>" hidden="">
+                                                    <label for="property-status-<%=index+8%>" class="select-btn">
+                                                        <%=propertyStatus%>
+                                                    </label>
+                                                </li>
+                                                <%})%>
+                                        </ul>
+                                        <%}%>
+
+                                    </div>
+
+                                    <div class="col-12 mb-2">
+                                        <h6 class=" fs-6 text-uppercase color-white  ls-2 fw-semibold">Property Pricing
+                                        </h6>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <div class="row row-cols-2 g-1">
+                                            <div class="col">
+                                                <input type="Number" class="form-control" name="priceFrom"
+                                                    placeholder="Min Price">
+                                            </div>
+                                            <div class="col">
+                                                <input type="Number" class="form-control" name="priceTo"
+                                                    placeholder="Max Price">
+                                            </div>
+                                            <!-- <label for="range4" class="form-label">Property Pricing</label>
+                                                    <input type="range" name="price" class="form-range" min="0" max="15" value="7" id="range4">
+                                                   <span><output for="range4" id="rangeValue" aria-hidden="true"></output>Cr</span>   -->
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <h6 class="color-white fs-6 text-uppercase ls-2 fw-semibold">Apartment Type</h6>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <ul class="select-custom">
+                                            <%for(let i=1;i<=6;i++){%>
+                                                 <li>
+                                                <input type="checkbox" name="rooms" value=<%=i%> id="apartmentType-<%=i%>"
+                                                    hidden="">
+                                                <label for="apartmentType-<%=i%>" class="select-btn"><%=i%> BHK</label>
+                                            </li>
+                                                <%}%>
+                                           
+                                        </ul>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <h6 class="color-white fs-6 text-uppercase ls-2 fw-semibold">Bathrooms</h6>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                     <ul class="select-custom">
+                                            <%for(let i=1;i<=6;i++){%>
+                                                 <li>
+                                                <input type="checkbox" name="bathrooms" value=<%=i%> id="bathrooms-<%=i%>"
+                                                    hidden="">
+                                                <label for="bathrooms-<%=i%>" class="select-btn"><%=i%></label>
+                                            </li>
+                                                <%}%>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-12 mb-2">
+                                        <h6 class="color-white fs-6 text-uppercase ls-2 fw-semibold">Area Square Feet
+                                        </h6>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <ul class="select-custom">
+                                           <% data.propertyArea.map((area,index)=>{%>
+
+                                                <li>
+                                                    <input type="checkbox" name="area"
+                                                        value="<%=area%>"
+                                                        id="property-area-<%=index%>" hidden="">
+                                                    <label for="property-area-<%=index%>" class="select-btn">
+                                                        <%=area%> sqft
+                                                    </label>
+                                                </li>
+                                                <%})%>
+                                           
+                                        </ul>
+                                    </div>
+                                    <!-- <div class="col-12 mb-2">
+                                        <h6 class="color-dark fs-6 text-uppercase ls-2 fw-semibold">Amenities</h6>
+                                    </div> -->
+
+                                    <%//if(data && data.amenity.length>0){%>
+                                        <!-- <div class="col-12 mb-2">
+                                            <ul class="row row-cols-1 custom-check-box mb-20">
+                                                <%data.amenity.forEach((amenity,index)=>{%>
+                                                    <li class="col">
+                                                        <input type="checkbox" name="amenities"
+                                                            value="<%=amenity.name%>" class="custom-control-input hide"
+                                                            id="customCheck<%=index%>">
+                                                        <label class="custom-control-label" for="customCheck<%=index%>">
+                                                            <%=amenity.name%>
+                                                        </label>
+                                                    </li>
+                                                    <%})%>
+                                            </ul>
+                                        </div> -->
+                                        <%//}%>
+                                            <div class="col-6">
+                                                <button class="btn btn-primary w-100" type="reset"
+                                                    name="reset">Reset</button>
+                                            </div>
+                                            <div class="col-6">
+                                                <button class="btn btn-primary w-100" type="submit"
+                                                    name="search">Search</button>
+                                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--================= Advance Filter End ==================-->
+
+
+        <!--=============== Start Listing ====================-->
+        <div class="full-row pt-0">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-12">
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="listing-filter-bar">
+                                    <div class="btn hover-color-white push-nav-toggle"><i class="fa-solid fa-bars"></i></div>
+                                    <div class="w-100 d-flex flex-row justify-content-between align-items-end">
+
+                                    
+                                    <div class="result-wrapper m-2">
+                                        <span class="ordering-pages" id="totalResult"></span>
+                                    </div>
+                                    <div class="short-by-wrapper">
+                                        <!-- <form class="listing-ordering" method="get">
+                                            <label>Short By:</label>
+                                            <select name="orderby2" class="makeMeList">
+                                                <option value="defaut">Default Order</option>
+                                                <option value="most_popular">Most Popular</option>
+                                                <option value="top_rated">Top Rated</option>
+                                                <option value="newest_items">Newest Items</option>
+                                                <option value="price_low_to_high">Price low to high</option>
+                                                <option value="price_hight_to_low">Price hight to low</option>
+                                            </select>
+                                        </form>
+                                        <form class="view-style" method="get">
+                                            <button title="Grid" class="grid-view current" value="grid" name="display" type="submit"><i class="fa-solid fa-list"></i></button>
+                                            <button title="List" class="list-view" value="list" name="display" type="submit"><i class="fa-solid fa-table-cells-large"></i></button>
+                                        </form> -->
+                                  <button class="btn btn-primary cursor-pointer icon-link icon-link-hover bi" id="goToCompare">Go To Compare
+                                   <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" class="bi" width="30px" fill="#FFFFFF"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+  </svg>
+                                  </button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+    
+       
+
+    <div class="row row-cols-lg-5 row-cols-md-4 row-cols-1 gap-4 p-4" id="filtered-properties">
+        
+        
+        <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+
+     <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+
+     <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+
+  <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+     <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+     <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+<div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+     <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+     <div class="card px-0 m-3"  aria-hidden="true">
+  <div class="card-img-top" style="height:150px;background-color: gray;width: 100%;"   alt="..."></div>
+  <div class="card-body">
+    <h5 class="card-title placeholder-glow">
+      <span class="placeholder col-6"></span>
+    </h5>
+    <p class="card-text placeholder-glow">
+      <span class="placeholder col-7"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-4"></span>
+      <span class="placeholder col-6"></span>
+      <span class="placeholder col-8"></span>
+    </p>
+    <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+  </div>
+</div>
+
+
+
+        
+    </div>
+    
+    <div class="row row-cols-1 mt-5" id="pagination">
+        
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--==================== End Listing =====================-->
+
+        <!--============== Footer Section Start ==============-->
+           <%- include("partials/footer.ejs")%>
+        <!--============== Footer Section End ==============-->
+
+        <!--============== Copyright Section Start ==============-->
+        
+        <!--============== Copyright Section End ==============-->
+
+    </div>
+
+
+    <!--============== Modal Start ==============-->
+    <div class="overlay-dark modal fade quick-view-modal" id="quick-view">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="close view-close">
+                    <span aria-hidden="true">&times;</span>
+                </div>
+                <div class="modal-body property-block summary p-3">
+                    <div class="row row-cols-xl-2 row-cols-1">
+                        <div class="col">
+                            <div class="entry-thumbnail bg-secondary hover-img-zoom m-2">
+                                <div class="type"><span class="sale text-white">For Sale</span><span class="featured text-white">Featured</span></div>
+                                <a href="#"><img class="w-100" src="assets/images/property/2.png" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="entry-content-wrapper">
+                                <div class="property-type"><a href="#">Condos</a></div>
+                                <h5 class="entry-title mb-1" id="staticBackdropLabel"><a href="#">Luxury Condos Infront of the street of Green Park</a></h5>
+                                <span class="listing-location"><i class="fas fa-map-marker-alt"></i> 4213 South Burlington, VT 05403</span>
+                                <span class="d-block color-dark hover-text-primary primary-font fs-7 mb-2">( 100 People Recommended )</span>
+                                <div class="d-flex align-items-center">
+                                    <span class="color-primary font-primary fw-semibold fs-3">$5600 - $8300/<small>mo</small></span>
+                                    <span class="product-status ms-4 my-1"><i class="fas fa-check"></i> Available</span>
+                                </div>
+                                <div class="product-offers mt-3">
+                                    <ul class="product-offers-list">
+                                        <li class="product-offer-item"> <strong>Special Price </strong>Get extra 19% off (price inclusive of discount)</li>
+                                        <li class="product-offer-item"> <strong>Bank Offer </strong> 10% instant discount on VISA Cards</li>
+                                        <li class="product-offer-item"> <strong>No cost EMI $49/month.</strong> Standard EMI also available</li>
+                                    </ul>
+                                </div>
+                                <hr>
+                                <div class="quantity">
+                                    <ul class="d-flex gap-2">
+                                        <li><span>Rooms:</span> 5</li>
+                                        <li><span>Beds:</span> 3</li>
+                                        <li><span>Bathrooms:</span> 2</li>
+                                        <li><span>Garage:</span> 1</li>
+                                        <li><span>Area:</span> 1100 Sqft</li>
+                                    </ul>
+                                </div>
+                                <h5 class="text-secondary my-3">Description</h5>
+                                <p>Bibendum purus aenean mus aenean eu interdum nonummy ipsum ad consequat. Dui eros donec faucibus convallis tempus rutrum id donec mus hymenaeos placerat congue curae mauris turpis gravida viverra consequat consequat
+                                    gravida luctus.</p>
+                                <div class="short-description d-flex">
+                                    <span class="me-4"><b>Highlights:</b></span>
+                                    <div class="short-description">
+                                        <ul class="list-style d-flex flex-column">
+                                            <li>Regular Fit.</li>
+                                            <li>Full sleeves.</li>
+                                            <li>Machine wash, tumble dry.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--============== Modal End ==============-->
+
+    <!-- Login Modal -->
+    <div class="modal fade login-modal" id="loginmodal" tabindex="-1" aria-labelledby="loginmodalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="exampleModalLabel">User Login</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body user-login-form">
+                    <form action="#" method="post">
+                        <div class="row row-cols-1 g-3">
+                            <div class="col">
+                                <label class="access-field"><i class="fa-solid fa-user"></i> <input type="email" class="form-control" placeholder="Username/Email" value="" required=""></label>
+                            </div>
+                            <div class="col">
+                                <label class="access-field"><i class="fa-solid fa-lock"></i> <input type="password" class="form-control" placeholder="Password" value="" required=""></label>
+                            </div>
+                            <div class="col">
+                                <div class="d-flex justify-content-between">
+                                    <label><input type="checkbox" name="remember" value=""> Remember me</label>
+                                    <span><a href="#">Forgot Password</a></span>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-secondary hover-flash-move w-100">Login</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-start">
+                    <a href="signup.html" class="text-dark d-table font-primary fw-medium ls-1 hover-color-primary"><u>Don't Have Account? Click Here.</u></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Login Modal End -->
+
+    <!-- Scroll to top -->
+    <div class="scroll-top-vertical xs-mx-none" id="scroll">Back to top <i class="ms-2 fa-solid fa-arrow-right-long"></i></div>
+
+
+    <!-- Javascript Files -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+     <script src="assets/js/filter-property.js"></script>
+     <%- include("partials/scripts.ejs")%>
+
+</body>
+</html>

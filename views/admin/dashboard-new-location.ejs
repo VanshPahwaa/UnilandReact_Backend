@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords"
+        content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+
+    <base href="../">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+    <!-- toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+
+<body class="dashboard-message">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+            
+            <%- include("../partials/dashboard-navbar")%>
+
+
+
+                <div class="right-sidebar-block">
+                    <!--============== Dashboard Start ==============-->
+            <%- include("../partials/headerDashboard.ejs")%>
+
+                 
+             <div class=" container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-title-wrapper d-lg-flex flex-column gap-3">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                        <li class="breadcrumb-item"><a href="admin">Dashboard</a></li>
+                                      <li class="breadcrumb-item"><a href="admin/locations">Location</a></li>
+
+                                        <li class="breadcrumb-item active" aria-current="">Edit Location</li>
+                                    </ol>
+                                </nav>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="full-row p-3">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 d-flex flex-row justify-content-between">
+                                    <h3 class="py-3 color-dark d-inline-block">New Location</h3>  
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-12">
+                                    <form class="submit-property .needs-validation" action="http://localhost:8080/backend/admin/location" id="myForm"
+                                        method="post">
+                                        <div class="row g-3 px-2">
+                                            <div class="col-md-12">
+                                                <label class="mb-1">Location Name</label>
+                                                <input class="form-control" name="locationName" type="text" required
+                                                    placeholder="Name">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mt-4">Upload</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--============== End Dashboard Start ==============-->
+
+                    <!--============== Footer Start =============-->
+                    <%- include("../partials/copyright.ejs")%>
+                        <!--============== Footer End =============-->
+                </div>
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/dashboard-new-location.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <!-- for toastify -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+
+
+        // can be used for future use in displaying custom messaage in case it is not validated 
+        // (function () {
+        //     'use strict'
+
+        //     const forms = document.querySelectorAll('.needs-validation')
+
+        //     Array.from(forms).forEach(function (form) {
+        //         form.addEventListener('submit', function (event) {
+        //             if (!form.checkValidity()) {
+        //                 event.preventDefault()
+        //                 event.stopPropagation()
+        //             }
+        //             form.classList.add('was-validated')
+        //         }, false)
+        //     })
+        // })()
+
+
+    </script>
+</body>
+
+</html>

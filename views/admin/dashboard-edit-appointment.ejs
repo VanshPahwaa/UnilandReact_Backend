@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords"
+        content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+
+    <base href="../../">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+    <!-- toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <style>
+
+         input[type=number]::-webkit-inner-spin-button,
+            input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+            }
+
+   input[name="mobileNumber"]{
+            border:none;
+            outline: none;
+        }
+        input[name="mobileNumber"]:hover{
+            border:none;
+            box-shadow: none;
+            outline:none;
+        }
+
+    </style>
+</head>
+
+<body class="dashboard-message">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+            <%- include("../partials/dashboard-navbar")%>
+
+                <div class="right-sidebar-block">
+                    <!--============== Dashboard Start ==============-->
+
+    <%- include("../partials/headerDashboard.ejs")%>
+
+             <div class=" container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-title-wrapper d-lg-flex flex-column gap-3">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="/admin/appointments">Appointment</a></li>
+
+                    <li class="breadcrumb-item active" aria-current="page">Edit Appointment</li>
+                                    </ol>
+                                </nav>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="full-row p-3">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 d-flex flex-row justify-content-between">
+                                    <h3 class="py-3 color-dark d-inline-block">Edit appointment</h3>  
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-12">
+                                    <% if(data.agent && data.appointment && data.location){%>
+                                      <form name="appointmentForm" id="appointmentForm" action="" method="put">
+                                        <div class="row g-3">
+                                            <div class="col-lg-12">
+                                                <label>Username</label>
+                                                <input type="text" name="clientName" class="form-control" disabled placeholder="Client Name" value="<%=data.appointment.clientName%>" required>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <label>Email</label>
+                                                <input type="email" name="email" value="<%=data.appointment.email%>" disabled class="form-control" placeholder="Email" required>
+                                            </div>
+
+                                             <div class="col-12 col-lg-6">
+                                                <label>Preferred Date</label>
+       <input 
+  type="date" 
+  name="preferredDate" 
+  value="<%= data.appointment.preferredDate ? new Date(data.appointment.preferredDate).toISOString().split('T')[0] : '' %>" 
+  class="form-control" 
+  required
+>
+
+
+
+                                            
+                                            
+                                            </div>
+
+                                            <div class="col-lg-6">
+              <label>Preferred Time</label>
+              <select class="form-control form-select p-1 " name="preferredTime" required>
+                <option value="" disabled <%=!data.appointment.preferredTime?'Selected':''%> hidden >Select Time</option>
+                <% data.time.forEach((time, index) => { %>
+                  <option class="form-select" style="color:#333; padding: 20px!important; border-radius: 10px;" <%=data.appointment.preferredTime==time?'Selected':''%> value="<%= time %>" >
+                    <%= time %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+                                            
+
+                                            <div class="col-lg-12">
+                                                <label>Location</label>
+                                                <select class="form-control" name="locationName" required>
+                                                    <% data.location.forEach((location, index) => { %>
+                                                        <option value="<%= location._id %>" <%=data.appointment.locationName==location.locationName?'Selected':''%>>
+                                                            <%= location.locationName %>
+                                                        </option>
+                                                    <% }) %>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <label>Mobile Number</label>
+                                                <!-- <input type="number" class="form-control" name="mobileNumber" placeholder="Mobile Number" minlength="10" maxlength="10"  min="1000000000" max="9999999999" required> -->
+                                            <div class="d-flex flex-row  form-control align-items-center">
+                                                    <span >+91</span> 
+                                                            <input type="text" 
+                                                            
+                                                            name="mobileNumber" 
+                                                            placeholder="Mobile Number" 
+                                                            class="w-100 "
+
+                                                            maxlength="10" 
+                                                            inputmode="numeric"
+                                                            style="border:none; color: gray;" 
+                                                            required
+                                                            disabled
+                                                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" value="<%=data.appointment.mobileNumber%>"/>
+                                                    </div>
+                                            </div>
+
+
+                                             <div class="col-lg-12">
+                                                <label>Payment Status</label>
+                                                <select class="form-control" name="status" disabled required>
+                                                    <% data.paymentStatus.forEach((status, index) => { %>
+                                                        <option value="<%=status%>" <%=data.appointment.status==status?'Selected':''%>>
+                                                            <%=status%>
+                                                        </option>
+                                                    <% }) %>
+                                                </select>
+                                            </div>
+
+                                            <%if(user.role=="admin"){%>
+                                              <div class="col-lg-12">
+                                                <label>Assign To</label>
+                                                <select class="form-control" name="assigned" <%= user.role == "agent" ? "disabled" : "" %> required>
+                                                    <option value="" <%= !data.appointment.assigned ? "selected" : "" %> disabled hidden>
+                                                    Select Agent
+                                                    </option>
+
+                                                    <% data.agent.forEach((agent) => { %>
+                                                    <option value="<%= agent._id %>" <%=data.appointment.assigned &&  String(data.appointment.assigned) == String(agent._id) ? 'selected' : "" %>>
+                                                        <%= agent.userName %>
+                                                    </option>
+                                                    <% }) %>
+                                                </select>
+                                                </div>
+<%}%>
+
+
+                                            <div class="col-lg-12">
+                                                <label>Message</label>
+                                                <textarea name="message" class="form-control" placeholder="Message" value="<%=data.appointment.message%>" rows="10"></textarea>
+                                            </div>
+
+                                         
+
+                                            <div class="col-lg-12">
+                                                <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                     <%}%>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--============== End Dashboard Start ==============-->
+
+                    <!--============== Footer Start =============-->
+                    <%- include("../partials/copyright.ejs")%>
+                        <!--============== Footer End =============-->
+                </div>
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/dashboard-edit-appointment.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <!-- for toastify -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+  const today = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
+  document.getElementById("preferredDate").setAttribute("min", today);
+</script>
+
+    <script>
+
+
+       const appointmentForm = document.getElementById("appointmentForm")
+
+appointmentForm.addEventListener("submit", async function (e) {
+    try {
+        console.log("hlo")
+        e.preventDefault()
+        const formData = new FormData(this);
+        const url = window.location.href; // use href for full URL string
+        const urlArray = url.split("/");
+        const id = urlArray[urlArray.length - 1];
+        console.log(id);
+        const urlEncodedData = new URLSearchParams(formData)
+        console.log(window.location.origin)
+        const response = await fetch(window.location.origin + "/backend/admin/appointment/" + id, {
+            method: "put",
+            body: urlEncodedData
+        })
+        const data = await response.json()
+        if (data.success) {
+            Toastify({
+                text: data.message,
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                close: true,
+                backgroundColor: "#AA8453",
+                style: {
+                    color: "#FFFFFF"
+                }
+            }).showToast();
+            this.reset()
+        } else {
+            throw Error(data.error)
+        }
+    } catch (error) {
+        Toastify({
+            text: error.message,
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            close: true,
+            style: {
+                color: "#FFFFFF",
+                backgroundColor:"red"
+            }
+        }).showToast();
+    }
+})
+
+
+    </script>
+</body>
+
+</html>

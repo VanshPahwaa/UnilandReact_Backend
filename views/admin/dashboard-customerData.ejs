@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Meta Tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Uniland - Real Estate HTML5 Template">
+    <meta name="keywords" content="real estate, property, property search, agent, apartments, booking, business, idx, housing, real estate agency, rental">
+    <meta name="author" content="unicoder">
+    <title>Uniland - Real Estate HTML5 Template</title>
+    <base href="../">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon2.ico">
+
+    <!-- Google Font -->	
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!--  CSS Style -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/webfonts/unicode/style.css">
+    <link rel="stylesheet" href="assets/css/layerslider.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/control.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        .pagination .page-item.disabled .page-link {
+                       /* lighter text */
+            pointer-events: none; /* no clicking */
+            background-color: #f5f5f5; /* light gray bg */
+            border-color: #ddd;   /* lighter border */
+            opacity: 0.6;         /* faded look */
+            }
+
+    </style>
+
+</head>
+<body class="dashboard-message">
+
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <div id="page_wrapper" class="bg-light-gray">
+        <div class="sidebar-page-wrapper">
+            <%- include("../partials/dashboard-navbar")%>
+                
+            <!-- main section -->   
+            <div class="right-sidebar-block">
+                <!--============== Header Section Start ==============-->
+             
+                 
+                <%- include("../partials/headerDashboard.ejs")%>
+
+             <div class=" container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="page-title-wrapper d-lg-flex flex-column gap-3">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0 bg-transparent p-0">
+                                        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+
+                    <li class="breadcrumb-item active" aria-current="page">Customer Data</li>
+                                    </ol>
+                                </nav>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--============== Header Section End ==============-->
+
+                <!--============== Dashboard Start ==============-->
+                <div class="full-row p-3">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-12 d-flex justify-content-between ">
+                                <h4 class="mb-3 color-dark">Customer Data</h4>
+                                  <span  class="text-decoration-none"  id="downloadCustomerData">
+                                        <span class="fw-medium text-white d-inline-block color-dark" ><i class="fa-solid fa-download fa-lg"></i></h6>
+                                        </span>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                       <div class="col-12 p-0 m-0">
+                               <form action="<%=data.currentUrl%>" class="banner-search-form quick-search form-icon-right position-relative px-3 " method="get">
+                                <div class="d-flex gap-1 p-0">
+                                    <div class="field-search field-icon flex-grow-1">
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <input type="date" class="form-control" name="fromDate"
+       value="<%= data.searchedValue?.fromDate || '' %>">
+                                        </div>
+                                    </div>
+                                    <div class="field-search field-icon flex-grow-1">
+                                        <div class="form-group">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                           <input type="date" class="form-control" name="toDate"
+       value="<%= data.searchedValue?.toDate || '' %>">
+
+                                        </div>
+                                    </div>
+                                    <div class="field-search">
+                                        <button class="btn btn-primary hover-flash-move w-100">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        
+                       <div class="row">
+                            <div class="col-12">
+                                <div class="dashboard-panel border bg-white rounded overflow-hidden w-100">
+                                    <div class="overflow-x-scroll font-fifteen">
+                                        <%if(data && data.customerData && data.customerData.length>0){%>
+                                           
+                                        <table class="w-100 items-list bg-transparent">
+                                            <thead>
+                                                 <tr>
+                                                    <th>Sr. No.</th>
+                                                    <th>Customer Details</th>
+                                                    <th>For</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <%data.customerData.forEach((customerData,index)=>{%>
+                                               <tr  data-customerData-id="<%=customerData._id%>">
+                                                            <td><%=(index+1)+(data.limit*(data.pagination.currentPage-1))%></td>
+                                                    <td>
+                                                    <div>
+                                                    <span><%=customerData.clientName%></span><br>
+                                                    <!-- <span><%=customerData.email%></span><br>
+                                                    <span><%=customerData.mobileNumber%></span> -->
+                                                    </div>
+                                                </td>
+                                                  <td>
+                                                    <%=customerData.leadType%>
+                                                  </td>
+                                                   
+                                                </tr>
+                                                 <%})%>
+                                            </tbody>
+                                        </table>
+
+                                         <%}else{%>
+                                        <h3 class="text-center p-5">No Found</h3>
+                                            <%}%>
+                                    </div>
+                                </div>
+                                
+                                     </div>
+                        </div>
+                                <%- include("../partials/tablePagination.ejs")%>
+                    </div>
+                </div>
+                <!--============== End Dashboard Start ==============-->
+
+                <!--============== Footer Start =============-->
+                    <%- include("../partials/copyright.ejs")%>
+                <!--============== Footer End =============-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript Files -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.min.js"></script>
+    <script src="assets/js/piechart/chart.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/mixitup.min.js"></script>
+    <script src="assets/js/range/tmpl.js"></script>
+    <script src="assets/js/range/jquery.dependClass.js"></script>
+    <script src="assets/js/range/draggable.js"></script>
+    <script src="assets/js/range/jquery.slider.js"></script>
+    <script src="assets/js/paraxify.js"></script>
+    <script src="assets/js/custom.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        
+       const downloadCustomerData = document.getElementById("downloadCustomerData")
+    downloadCustomerData.addEventListener("click", async function (e) {
+    try {
+        console.log("hlo")
+        e.preventDefault()
+        // const formData = new FormData(this);
+        const url = window.location.href; // use href for full URL string
+        const urlArray = url.split("/");
+        let query = urlArray[urlArray.length - 1];
+        let tempArray=query.split("?")
+        query=tempArray[tempArray.length-1]
+
+        console.log(query);
+        console.log(window.location.origin)
+        const response = await fetch(window.location.origin + "/backend/appointment/customerData/download-excel?" + query, {
+            method: "get"
+        })
+
+          if (!response.ok) throw new Error('Network response was not ok');
+
+            // Convert response to blob
+            const blob = await response.blob();
+
+    // Create a temporary URL for the blob
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    // Create a temporary <a> element to trigger download
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = 'appointments.xlsx'; // File name
+    document.body.appendChild(a);
+    a.click();
+        // Clean up
+        a.remove();
+        window.URL.revokeObjectURL(blobUrl);
+     
+        // console.log(data)
+        Toastify({
+                text: "Downloading Started",
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                close: true,
+                backgroundColor: "#AA8453",
+                style: {
+                    color: "#FFFFFF"
+                }
+            }).showToast();
+            
+    } catch (error) {
+        Toastify({
+            text: error.message,
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            close: true,
+            style: {
+                color: "#FFFFFF",
+                backgroundColor:"red"
+            }
+        }).showToast();
+    }
+})
+
+    </script>
+
+</body>
+</html>
