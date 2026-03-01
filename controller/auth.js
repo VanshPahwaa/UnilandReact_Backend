@@ -39,7 +39,6 @@ const checkUser = async (req, res) => {
                 redirect:"/dashboard"
             })
         }else{
-
             return res.status(401).json({
                 success:false,
                 message:"Failed: Invalid Credentials"

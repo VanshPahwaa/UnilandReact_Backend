@@ -1,58 +1,57 @@
 const express = require("express")
-require("dotenv").config()
 const app = express()
-
 const cors = require("cors")
+const MongoStore = require("connect-mongo");
+const dbStart = require("./config/db.js");
+const { upload } = require("./config/multerconfig.js");
+const session = require('express-session');
+const path = require("path");
+require("dotenv").config();
+const errorMiddleware=require("./middlewares/errorMiddleware.js");
 
-app.set("trust proxy",1)
 
+
+
+
+
+// const frontEndRouter = require("./routes/frontend.js")
+
+// const authRouter = require("./routes/auth.js")
+// const propertyRouter = require("./routes/backend/property.js")
+// const propertyAttributeRouter = require("./routes/propertyAttributeRoutes.js")
+// const adminRouter = require("./routes/backend/admin.js")
+// const agentRouter = require("./routes/backend/agent.js")
+// const locationRouter = require("./routes/backend/location.js")
+// const leadRouter = require("./routes/backend/lead.js")
+// const bankRouter = require("./routes/backend/bank.js")
+// const paymentRouter = require("./routes/backend/paymentGateway.js")
+// const appointmentRouter = require("./routes/backend/appointment.js")
+// const dashboardRouter = require("./routes/dashboard/dashboard.js")
+// const homeRouter=require("./routes/home.js");
+const appRouter=require("./routes/route.js");
+
+
+
+
+
+//  configuration
+// app.set("trust proxy",1)
 app.use(cors({
-    origin: [process.env.CLIENT_URL,"http://localhost:5173"],
+    origin: [process.env.CLIENT_URL],
+     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }))
-
-
-
-const dbStart = require("./common/db.js")
-const frontEndRouter = require("./routes/frontend.js")
-const MongoStore = require("connect-mongo")
-const { upload } = require("./common/multerconfig.js")
-const session = require('express-session')
-const path = require("path");
-
-
-
-
-
-const authRouter = require("./routes/auth.js")
-const propertyRouter = require("./routes/backend/property.js")
-const propertyAttributeRouter = require("./routes/propertyAttributeRoutes.js")
-const adminRouter = require("./routes/backend/admin.js")
-const agentRouter = require("./routes/backend/agent.js")
-const locationRouter = require("./routes/backend/location.js")
-const leadRouter = require("./routes/backend/lead.js")
-const bankRouter = require("./routes/backend/bank.js")
-const paymentRouter = require("./routes/backend/paymentGateway.js")
-const appointmentRouter = require("./routes/backend/appointment.js")
-const dashboardRouter = require("./routes/dashboard/dashboard.js")
-const homeRouter=require("./routes/home.js")
-
 
 
 
 //middleware's
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/uploads", express.static("uploads"));
 
-
-
-// NOT IN USE
-// app.use(expressLayouts)
-// app.set("view engine","ejs")
-// app.set('views', path.join(__dirname, 'views'));
-// app.set("views","./views")
+// app.use("/URL_PREFIX", express.static("FOLDER_NAME"));
 
 
 app.use(session({
@@ -93,9 +92,9 @@ app.use((req, res, next) => {
 
 
 //routes
-app.use("/",homeRouter)
-app.use("/dashboard", dashboardRouter)
-app.use("/auth",authRouter);
+app.use("/",appRouter);
+// app.use("/dashboard", dashboardRouter)
+// app.use("/auth",authRouter);
 // app.use("/",frontEndRouter);
 // app.use("/propertyAttribute",propertyAttributeRouter);
 // app.use("/backend/lead",leadRouter)
@@ -110,14 +109,17 @@ app.use("/auth",authRouter);
 // app.use("/backend/agent",agentRouter)
 
 
-app.use((req, res) => {// in case route not found\
+app.use((req, res) => {
+    // in case route not found 
     console.log("in not found method")
     res.status(404).json({
         success:false,
         message:"Not Found"
     })
-})
+});
 
+
+app.use(errorMiddleware);
 
 //running server
 app.listen(process.env.PORT, (req, res) => {

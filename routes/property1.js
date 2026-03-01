@@ -1,36 +1,42 @@
 const mongoose = require("mongoose")
 const express = require("express")
 require("dotenv").config()
-const Lead = require("../model/lead")
 
-const getAllAgents = require("../helper/agent.js")
 const router = express.Router();
 const { bathroomHelper, apartmentTypeHelper, limitHelper, listingStatusHelper, pageHelper, leadTypeHelper, leadStatusHelper, propertyTypeHelper, propertyStatusHelper, propertyStageHelper, propertyAreaHelper, yearOfConstructionHelper, paymentStatusHelper, amountHelper, timeHelper } = require("../utils/data.js")
 const { getAllLeads, getAllAmenities, getAllLocations, getAllAppointments, getAllBanks } = require("../helper/helperForModels.js")
 const getAllPropertyHelper = require("../helper/property.js")
 const paymentRouter = require("./backend/paymentGateway.js");
 const Property = require("../model/property.js");
-const { default: puppeteer } = require("puppeteer")
+const { default: puppeteer } = require("puppeteer");
+const {
+  createProperty,
+  editProperty,
+} = require("../controller/property.js");
+const { upload } = require("../config/multerconfig.js");
 
 
 
-//APPOINTMENT
-router.get("/edit-appointment", async (req, res) => {
-    try {
-        const location = await getAllLocations()
-
+router.get("/", async (req, res) => {
+   try {
+         
+        const property = await getAllPropertyHelper({listingStatus:"Published"},{},{},["location","amenities"]);
         res.status(200).json({
             success: true,
-            message: "Edit Data fetched successfully",
+            message: "Property fetched successfully",
             data: {
-                location: location.results,
-                time: timeHelper
+                property: property.results,
+                pagination: property.pagination,
+                currentUrl: req.originalUrl.split("?")[0],
+                limit: limitHelper,
+                pageTitle: "Property",
+                // queryString: new URLSearchParams(rest).toString()
             }
         });
     }
     catch (error) {
         console.log(error);
-        res.json( {
+        res.status(500).json({
             success: false,
             message: "Failed: Internal Server Error",
             error: error.message
@@ -38,86 +44,58 @@ router.get("/edit-appointment", async (req, res) => {
     }
 })
 
-router.get("/edit-lead", async (req, res) => {
-    try {
+router.get("/my-property", async (req, res) => {
+  try {
+    
+    const page = req.query.page || pageHelper;
+    const limit = req.query.limit || limitHelper;
+    let filter = req.query.filter || {};
 
-        const location = await getAllLocations()
-
-        res.status(200).json({
-            success: true,
-            message: "Edit Data fetched successfully",
-            data: {
-
-                location: location.results,
-                leadType: leadTypeHelper,
-                leadStatus: leadStatusHelper
-            }
-        });
+    if (req.query.search) {
+      filter = {
+        ...filter,
+        title: { $regex: req.query.search, $options: "i" },
+      };
     }
-    catch (error) {
-        console.log(error);
-        res.json({
-            success: false,
-            message: "Failed: Internal Server Error",
-            error: error.message
-        })
-    }
-})
 
-router.post("/lead", async (req, res) => {
-    try {
-        const { clientName, location, email, mobileNumber, leadType,propertyInterested } = req.body;
-        let allowedEntries = { clientName, location: location, email, mobileNumber, leadType };
-        if(propertyInterested){
-            allowedEntries={...allowedEntries,propertyInterested}
-        }
-        const lead = await Lead.create(allowedEntries); // req.body must match schema
-        res.status(201).json({
-            success: true,
-            message: "Query Recieved successfully"
-        });
-    } catch (err) {
-        console.log(err)
-        res.status(400).json({
-            success: false,
-            message: "Error: Creating Lead",
-            error: err.message
-        });
+    if (req.session && req.session.user && req.session.user.role == "agent") {
+      filter = { uploadedBy: req.session.user.userId };
+    } else {
     }
+    const property = await getAllPropertyHelper(
+      filter,
+      { page: page, limit: limit },
+      {},
+      ["location"]
+    );
+    console.log(property);
+
+    res.status(200).json({
+      success: true,
+      message: "Property fetched successfully",
+      data: {
+        property: property.results,
+        pagination: property.pagination,
+        currentUrl: req.originalUrl.split("?")[0],
+        limit: limitHelper,
+        pageTitle: "Property",
+        // queryString: new URLSearchParams(rest).toString()
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed: Internal Server Error",
+      error: error.message,
+    });
+  }
 });
 
 
-// property
 
-router.get("/edit-property", async (req, res) => {
-    try {
-        const amenities = await getAllAmenities({}, { limit: 100 })
-        const location = await getAllLocations();
 
-        res.status(200).json({
-            success: true,
-            message: "Success: Edit Info Fetched",
-            data: {
-                propertyType: propertyTypeHelper,
-                propertyStatus: propertyStatusHelper,
-                rooms: apartmentTypeHelper,
-                area: propertyAreaHelper,
-                bathrooms: bathroomHelper,
-                amenities: amenities.results,
-                propertyStage: propertyStageHelper,
-                location: location.results,
-                listingStatus: listingStatusHelper,
-                yearOfConstruction: yearOfConstructionHelper
-            }
-        })
-    } catch (error) {
-        res.render("common/500.ejs", {
-            success: false,
-            message: "Failed: Product not Fetched",
-            error: error.message || "Server Error"
-        })
-    }
-})
+
 
 router.get("/filter-property", async (req, res) => {
     try {
@@ -246,7 +224,38 @@ router.get("/filter-property", async (req, res) => {
     }
 })
 
-router.get("/property/:id", async (req, res) => {
+router.get("/edit-property", async (req, res) => {
+    try {
+        const amenities = await getAllAmenities({}, { limit: 100 })
+        const location = await getAllLocations();
+
+        res.status(200).json({
+            success: true,
+            message: "Success: Edit Info Fetched",
+            data: {
+                propertyType: propertyTypeHelper,
+                propertyStatus: propertyStatusHelper,
+                rooms: apartmentTypeHelper,
+                area: propertyAreaHelper,
+                bathrooms: bathroomHelper,
+                amenities: amenities.results,
+                propertyStage: propertyStageHelper,
+                location: location.results,
+                listingStatus: listingStatusHelper,
+                yearOfConstruction: yearOfConstructionHelper
+            }
+        })
+    } catch (error) {
+        res.render("common/500.ejs", {
+            success: false,
+            message: "Failed: Product not Fetched",
+            error: error.message || "Server Error"
+        })
+    }
+})
+
+
+router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const property = await getAllPropertyHelper({ _id: id }, {}, {}, ["amenities","location"]);
@@ -268,99 +277,44 @@ router.get("/property/:id", async (req, res) => {
     }
 })
 
-router.get("/property", async (req, res) => {
-   try {
-         
-        const property = await getAllPropertyHelper({listingStatus:"Published"},{},{},["location","amenities"]);
-        res.status(200).json({
-            success: true,
-            message: "Property fetched successfully",
-            data: {
-                property: property.results,
-                pagination: property.pagination,
-                currentUrl: req.originalUrl.split("?")[0],
-                limit: limitHelper,
-                pageTitle: "Property",
-                // queryString: new URLSearchParams(rest).toString()
-            }
-        });
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({
-            success: false,
-            message: "Failed: Internal Server Error",
-            error: error.message
-        })
-    }
-})
 
-
-
-
-router.get('/property/brouchure/:id', async (req, res) => {
+router.post("/compare", async (req, res) => {
     try {
-        const { id } = req.params;
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        console.log(`${process.env.CLIENT_URL}/property/brouchure/${id}`)
-
-        await page.goto(`${process.env.CLIENT_URL}property/brouchure/${id}`, { waitUntil: 'networkidle0' });
-
-
-        const pdfBuffer = await page.pdf({ format: 'LEGAL', printBackground: true });
-
-        await browser.close();
-
-        // Force browser to download PDF
-        res.set({
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': `attachment; filename="Property-${id}.pdf"`,
-        });
-
-        res.send(pdfBuffer);
-    } catch (error) {
-        console.log(error.message)
-    }
-})
-
-
-
-
-// banks
-router.get("/banks", async (req, res) => {
-    try {
-       
-        // console.log(page,limit,filter)
-        const banks = await getAllBanks()
-
-        console.log(banks)
-
-
+        const { ids } = req.body;
+        console.log(ids)
+        if (!Array.isArray(ids) || ids.length == 0) {
+            return res.status(400).json({
+                message: "No Property Ids Provided"
+            })
+        }
+        const properties = await getAllPropertyHelper({_id:{$in:ids}},{},{},["amenities","location"])
         res.json({
-            success: true,
-            message: "Banks fetched successfully",
-            data: {
-                bank: banks.results,
-                pagination: banks.pagination,
-                currentUrl: req.originalUrl.split("?")[0],
-                limit: limitHelper,
-                pageTitle: "Banks",
-            }
-        });
-
+            sucess: true,
+            message:"properties  successfully fetched",
+            property: properties.results
+        })
     } catch (error) {
         console.log(error)
         res.status(500).json({
             success: false,
-            message: "Internal Server Error",
-            error: error.message || "Internel Server Error"
+            message: error.message
         })
     }
 })
 
 
+// auth
+router.put(
+  "/:id",
+  upload.fields([
+    { name: "imageUrl", maxCount: 1 },
+    { name: "secondaryImageUrl", maxCount: 10 },
+  ]),
+  editProperty
+);
+
+// for dashboard users
 
 
-router.use("/payment", paymentRouter);
-module.exports = router
+
+module.exports=router
