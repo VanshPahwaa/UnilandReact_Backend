@@ -1,9 +1,25 @@
 const Property = require("../model/property")
 const User = require("../model/user")
-const fs = require("fs")
-const path = require("path");
-const getAllPropertyHelper = require("../helper/property");
+const getAllPropertyHelper = require("../service/property");
 const { pageHelper, limitHelper } = require("../utils/data");
+const { generatePresignedPostConfig, moveTempToPermanent, deleteS3Object } = require("../service/s3Service");
+const AppError = require("../utils/AppError");
+
+/**
+ * Generates S3 pre-signed POST config for property images.
+ */
+const getUploadConfig = async (req, res) => {
+  try {
+    const { fileType, fileName } = req.query;
+    if (!fileType || !fileType.startsWith("image/")) {
+      return res.status(400).json({ success: false, message: "Only image files are allowed" });
+    }
+    const config = await generatePresignedPostConfig(fileType, fileName || "property.png", "properties");
+    res.status(200).json({ success: true, data: config });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 
 
 // it will not work as imageUrl is only String tyype and it will return array of string 
@@ -21,38 +37,50 @@ const { pageHelper, limitHelper } = require("../utils/data");
 
 const createProperty = async (req, res) => {
   try {
-    // const imageUrl=findPaths(req.files.imageUrl)
-    const imageUrl = req.files.imageUrl ? req.files.imageUrl[0].path : null;
-    const secondaryImageUrl = req.files.secondaryImageUrl ? req.files.secondaryImageUrl.map((file, index) => file.path) : []
+    const { imageKey, secondaryImageKeys, ...rest } = req.body;
 
-    let uploadedBy = null
-    console.log(req.session)
+    let uploadedBy = null;
     if (req.session && req.session.user) {
-      uploadedBy = req.session.user.userId
+      uploadedBy = req.session.user.userId;
     }
-    console.log(req.body)
-    if (Array.isArray(req.body.description)) {
-      req.body.description = req.body.description.join(''); // join without separator
+
+    if (Array.isArray(rest.description)) {
+      rest.description = rest.description.join('');
     }
-    const property = new Property({ ...req.body, imageUrl: imageUrl, secondaryImageUrl: secondaryImageUrl, uploadedBy: uploadedBy });
 
-    const result = await property.save()
+    // 1. Create PENDING record
+    const property = new Property({
+      ...rest,
+      imageUrl: imageKey,
+      secondaryImageUrl: secondaryImageKeys || [],
+      uploadedBy: uploadedBy,
+      status: "PENDING"
+    });
 
-    console.log(result)
+    await property.save();
+
+    // 2. Move images if provided
+    if (imageKey) {
+      const permanentKey = await moveTempToPermanent(imageKey);
+      property.imageUrl = permanentKey;
+    }
+
+    if (secondaryImageKeys && Array.isArray(secondaryImageKeys)) {
+      const permanentKeys = await Promise.all(secondaryImageKeys.map(key => moveTempToPermanent(key)));
+      property.secondaryImageUrl = permanentKeys;
+    }
+
+    // 3. Set to ACTIVE
+    property.status = "ACTIVE";
+    await property.save();
+
     res.status(201).json({
       message: "Success: Property uploaded successfully",
-      success: true
+      success: true,
+      data: property
     });
   } catch (err) {
-    // if (err.name === "ValidationError") {
-    //   // Extract readable messages
-    //   let messages = {};
-    //   for (let field in err.errors) {
-    //     messages[field] = err.errors[field].message;
-    //   }
-    // return res.status(500).json({ success: false, message: err.message });
-    // }
-    console.log(err)
+    console.error(err);
     res.status(500).json({ success: false, message: err.message || "Server error" });
   }
 }
@@ -64,98 +92,67 @@ function toArray(value) {
 
 const editProperty = async (req, res) => {
   try {
-    console.log("in edit property")
     const { id } = req.params;
+    const { imageKey, secondaryImageKeys, retainedExistingImage, imageUrl, secondaryImageUrl, ...rest } = req.body;
 
-    console.log(req.files)
-    // for updation of imageUrl field
-    if (req.files.imageUrl) {
-      const newPath = req.files.imageUrl[0].path
-      const property = await Property.findById(id);
-      const oldPath = path.join(process.cwd(), property.imageUrl)
+    let property = await Property.findById(id);
+    if (!property) return res.status(404).json({ success: false, message: "Property not found" });
 
-      // for deleting the file
-      if (fs.existsSync(oldPath)) {
-        fs.unlinkSync(oldPath)
-      }
-      property.imageUrl = newPath
-      await property.save()
+    // 1. Handle primary image update
+    if (imageKey) {
+      const permanentKey = await moveTempToPermanent(imageKey);
+      if (property.imageUrl) await deleteS3Object(property.imageUrl);
+      property.imageUrl = permanentKey;
     }
 
-    if (Array.isArray(req.body.description)) {
-      req.body.description = req.body.description.join(''); // join without separator
-    }
 
-    // dealing with secondary images
-    let property = await Property.findById(id)
-    let secondaryPath = ''
-    req.body.retainedExistingImage = toArray(req.body.retainedExistingImage)
+    // 2. Handle secondary images logic
+    const retained = toArray(retainedExistingImage).map(img => {
+      if (typeof img !== 'string') return img;
+      // Strip bucket URL if present to keep only the key
+      return img.replace(/^https:\/\/.*\.amazonaws\.com\//, "");
+    });
 
-    if (req.body.retainedExistingImage.length != property.secondaryImageUrl.length) {
-      for (let value of property.secondaryImageUrl) {
-        console.log(value, req.body.retainedExistingImage)
-        console.log("not equal length", req.body.retainedExistingImage.includes(value))
-        if (!req.body.retainedExistingImage.includes(value)) {
-          const oldPath = path.join(process.cwd(), value);
-          if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath)
-            console.log("deleted")
-          }
-          let index = property.secondaryImageUrl.indexOf(value)
-          property.secondaryImageUrl.splice(index, 1)
-          console.log("new array", property.secondaryImageUrl)
-        }
+    // a. Identify and delete removed images from S3
+    for (let currentKey of (property.secondaryImageUrl || [])) {
+      if (!retained.includes(currentKey)) {
+        await deleteS3Object(currentKey);
       }
     }
 
-    // req.body.deletedExistingImages=toArray(req.body.deletedExistingImages)
-    // if(req.body.deletedExistingImages.length>0){
-    //   for(let value of req.body.deletedExistingImages){
-    //     if(property.secondaryImageUrl.includes(value)){
-    //       const oldPath=path.join(process.cwd(),value)
-    //       if(fs.existsSync(oldPath)){
-    //         fs.unlinkSync(oldPath)
-    //         console.log("deleted")
-    //       }
-    //       let index=property.secondaryImageUrl.indexOf(value)
-    //       property.secondaryImageUrl.splice(index,1);
-    //     }
-    //   }
-    // }
+    // b. Update secondary list with retained ones
+    property.secondaryImageUrl = retained;
 
-    console.log("req.files.secondaryImageUrl:", req.files.secondaryImageUrl);
-
-    let filesArray = req.files.secondaryImageUrl
-      ? Array.isArray(req.files.secondaryImageUrl)
-        ? req.files.secondaryImageUrl
-        : [req.files.secondaryImageUrl]
-      : [];
-    console.log("filessArray", filesArray)
-    if (filesArray.length > 0) {
-      const secondaryPath = filesArray.map(f => f.path);
-      property.secondaryImageUrl.push(...secondaryPath);
+    // c. Add new S3 keys
+    if (secondaryImageKeys && Array.isArray(secondaryImageKeys)) {
+      const newPermanentKeys = await Promise.all(secondaryImageKeys.map(key => moveTempToPermanent(key)));
+      property.secondaryImageUrl.push(...newPermanentKeys);
     }
 
-    await property.save()
-    if (req.body.additionalInformation) {
-      req.body.additionalInformation = JSON.parse(req.body.additionalInformation);
+    // 3. Update rest of the fields
+    if (Array.isArray(rest.description)) {
+      rest.description = rest.description.join('');
     }
-    if (req.body.address) {
-      req.body.address = JSON.parse(req.body.address);
+
+    if (rest.additionalInformation && typeof rest.additionalInformation === "string") {
+      rest.additionalInformation = JSON.parse(rest.additionalInformation);
     }
-    console.log({ ...req.body })
-    let result = await Property.findByIdAndUpdate(id, { $set: req.body }, { new: true })
-    res.status(201).json({
+    if (rest.address && typeof rest.address === "string") {
+      rest.address = JSON.parse(rest.address);
+    }
+
+    console.log("property", property);
+    Object.assign(property, rest);
+    console.log(await property.save());
+
+    res.status(200).json({
       success: true,
-      message: "Success:Property Updated successfully",
-      data: result
+      message: "Success: Property Updated successfully",
+      data: property
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
-      success: false,
-      error: error.message
-    });
+    console.error(error);
+    res.status(400).json({ success: false, message: error.message });
   }
 }
 
@@ -177,9 +174,7 @@ const getProperty = async (req, res) => {
     console.log(property)
     res.json({
       message: "Success: Property fetched successfully",
-      data: property,
-      fileData: base64File,
-      fileType: path.extname(property.imageUrl)
+      data: property
     });
   } catch (error) {
     res.status(400).json({
@@ -328,4 +323,4 @@ const getFilteredProperty = async (req, res) => {
   }
 }
 
-module.exports = { createProperty, getProperty, getAllProperty, getFilteredProperty, editProperty }
+module.exports = { createProperty, getProperty, getAllProperty, getFilteredProperty, editProperty, getUploadConfig }

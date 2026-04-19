@@ -1,3 +1,6 @@
+require("dotenv").config({
+    path: `.env.${process.env.NODE_ENV || "development"}`
+});
 const express = require("express")
 const app = express()
 const cors = require("cors")
@@ -6,16 +9,11 @@ const dbStart = require("./config/db.js");
 const { upload } = require("./config/multerconfig.js");
 const session = require('express-session');
 const path = require("path");
-require("dotenv").config();
-const errorMiddleware=require("./middlewares/errorMiddleware.js");
 
-
-
-
+const errorMiddleware = require("./middlewares/errorMiddleware.js");
 
 
 // const frontEndRouter = require("./routes/frontend.js")
-
 // const authRouter = require("./routes/auth.js")
 // const propertyRouter = require("./routes/backend/property.js")
 // const propertyAttributeRouter = require("./routes/propertyAttributeRoutes.js")
@@ -28,30 +26,31 @@ const errorMiddleware=require("./middlewares/errorMiddleware.js");
 // const appointmentRouter = require("./routes/backend/appointment.js")
 // const dashboardRouter = require("./routes/dashboard/dashboard.js")
 // const homeRouter=require("./routes/home.js");
-const appRouter=require("./routes/route.js");
-
-
-
+const appRouter = require("./routes/route.js");
 
 
 //  configuration
 // app.set("trust proxy",1)
+// app.use(cors({
+//     origin: [process.env.CLIENT_URL],
+//      methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true
+// }))
+
 app.use(cors({
-    origin: [process.env.CLIENT_URL],
-     methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: "*",
     credentials: true
-}))
+}));
 
 
-
-//middleware's
+// //middleware's
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+// app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("/uploads", express.static("uploads"));
 
-// app.use("/URL_PREFIX", express.static("FOLDER_NAME"));
+// // app.use("/URL_PREFIX", express.static("FOLDER_NAME"));
 
 
 app.use(session({
@@ -79,7 +78,13 @@ app.use(session({
 
 
 //db connecting
-dbStart().catch(error => {
+dbStart().then(() => {
+    //running server
+    app.listen(process.env.PORT, '0.0.0.0', (req, res) => {
+        console.log(process.env.PORT)
+        console.log("app is running on port 5000");
+    })
+}).catch(error => {
     console.log("Error", error)
 })
 
@@ -92,7 +97,7 @@ app.use((req, res, next) => {
 
 
 //routes
-app.use("/",appRouter);
+app.use("/", appRouter);
 // app.use("/dashboard", dashboardRouter)
 // app.use("/auth",authRouter);
 // app.use("/",frontEndRouter);
@@ -113,16 +118,11 @@ app.use((req, res) => {
     // in case route not found 
     console.log("in not found method")
     res.status(404).json({
-        success:false,
-        message:"Not Found"
+        success: false,
+        message: "Not Found"
     })
 });
 
 
-app.use(errorMiddleware);
+// app.use(errorMiddleware);
 
-//running server
-app.listen(process.env.PORT, (req, res) => {
-    console.log(process.env.PORT)
-    console.log("app is running on port 5000");
-})

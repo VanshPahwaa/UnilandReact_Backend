@@ -8,6 +8,6 @@ const locationSchema = new mongoose.Schema({
 //   { unique: true, collation: { locale: 'en', strength: 2 } }
 // );
 
-const Location = mongoose.model("Location", locationSchema)
+const Location = mongoose.model("Location", locationSchema,"locations")
 // Location.collection.dropIndex();
 module.exports = Location;

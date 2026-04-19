@@ -64,8 +64,31 @@ const propertySchema = new mongoose.Schema({
 
 
   //rent specific properties
-  rent: { type: Number }
-}, { timestamps: true })
+  rent: { type: Number },
+  status: { type: String, enum: ["PENDING", "ACTIVE"], default: "PENDING" }
+}, { 
+  timestamps: true,
+  toJSON: {
+    transform: function (doc, ret) {
+      const { getFullUrl } = require("../service/s3Service");
+      if (ret.imageUrl) ret.imageUrl = getFullUrl(ret.imageUrl);
+      if (ret.secondaryImageUrl && Array.isArray(ret.secondaryImageUrl)) {
+        ret.secondaryImageUrl = ret.secondaryImageUrl.map(img => getFullUrl(img));
+      }
+      return ret;
+    }
+  },
+  toObject: {
+    transform: function (doc, ret) {
+      const { getFullUrl } = require("../service/s3Service");
+      if (ret.imageUrl) ret.imageUrl = getFullUrl(ret.imageUrl);
+      if (ret.secondaryImageUrl && Array.isArray(ret.secondaryImageUrl)) {
+        ret.secondaryImageUrl = ret.secondaryImageUrl.map(img => getFullUrl(img));
+      }
+      return ret;
+    }
+  }
+})
 
 // propertySchema.post('find', function (result) {
 //   // const fileBuffer = fs.readFileSync(path.resolve(property.imageUrl))

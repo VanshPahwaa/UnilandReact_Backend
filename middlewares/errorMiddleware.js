@@ -3,7 +3,7 @@ const errorMiddlware=(err,req,res,next)=>{
     if(!err?.statusCode){
         err.statusCode=500;
     }
-    res.statu(err.statusCode).json({
+    res.status(err.statusCode).json({
         success:false,
         message:err?.message || "Internal Server Error"
     })

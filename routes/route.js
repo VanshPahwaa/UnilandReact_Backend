@@ -10,7 +10,7 @@ const bankRouter=require("./bank");
 const router = express.Router();
 const appointmentRouter=require("./appointments");
 const amenitiesRouter=require("./amenities");
-
+const paymentRouter=require("./payment");
 
 
 
@@ -23,6 +23,7 @@ router.use("/location",locationRouter);
 router.use("/bank",bankRouter);
 router.use("/appointment",appointmentRouter);
 router.use("/amenity",amenitiesRouter);
+router.use("/payment",paymentRouter);
 // router.use("/lead",)
 
 module.exports = router

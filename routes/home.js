@@ -3,11 +3,14 @@ const express = require("express")
 require("dotenv").config()
 const Lead = require("../model/lead")
 
-const getAllAgents = require("../helper/agent.js")
+const { getAllAgents } = require("../service/user");
 const router = express.Router();
 const { bathroomHelper, apartmentTypeHelper, limitHelper, listingStatusHelper, pageHelper, leadTypeHelper, leadStatusHelper, propertyTypeHelper, propertyStatusHelper, propertyStageHelper, propertyAreaHelper, yearOfConstructionHelper, paymentStatusHelper, amountHelper, timeHelper } = require("../utils/data.js")
-const { getAllLeads, getAllAmenities, getAllLocations, getAllAppointments, getAllBanks } = require("../helper/helperForModels.js")
-const getAllPropertyHelper = require("../helper/property.js")
+const { getAllAmenities } = require("../service/amenities");
+const { getAllLocations } = require("../service/location");
+const { getAllAppointments } = require("../service/appointments");
+const { getAllBanks } = require("../service/bank");
+const { getAllPropertyHelper } = require("../service/property");
 const paymentRouter = require("./backend/paymentGateway.js");
 const Property = require("../model/property.js");
 const { default: puppeteer } = require("puppeteer")
