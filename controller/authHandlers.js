@@ -1,6 +1,6 @@
 const AppError = require("../utils/AppError");
 const User = require("../model/user");
-const asyncHandler=require("../middlewares/asyncHandler");
+const asyncHandler = require("../middlewares/asyncHandler");
 
 const logout = asyncHandler(async (req, res) => {
   await new Promise((resolve, reject) => {

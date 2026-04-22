@@ -31,16 +31,16 @@ const appRouter = require("./routes/route.js");
 
 //  configuration
 // app.set("trust proxy",1)
-// app.use(cors({
-//     origin: [process.env.CLIENT_URL],
-//      methods: ["GET", "POST", "PUT", "DELETE"],
-//     credentials: true
-// }))
-
 app.use(cors({
-    origin: "*",
+    origin: [process.env.CLIENT_URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
-}));
+}))
+
+// app.use(cors({
+//     origin: "*",
+//     credentials: true
+// }));
 
 
 // //middleware's
