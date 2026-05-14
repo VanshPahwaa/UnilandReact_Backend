@@ -30,7 +30,7 @@ const appRouter = require("./routes/route.js");
 
 
 //  configuration
-// app.set("trust proxy",1)
+app.set("trust proxy", 1)
 app.use(cors({
     origin: [process.env.CLIENT_URL],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -63,13 +63,14 @@ app.use(session({
         ttl: 60// use to manipulate the duration of cookie on db it is 60 minutes
     }),
     cookie: {
-        // if production is true then request can be sent on https
-        // secure: process.env.PRODUCTION=="true", //if true, cookie will be set on only on https  // not okey
-        secure: false,
+        sameSite: process.env.PRODUCTION == "true" ? "none" : 'lax',
+        //None: Cookie is sent in all cases (including cross-site)
+        // lax: when navigating normally (clicking a link) not sent in background requests (like POST from another site)
+
+        secure: process.env.PRODUCTION == "true" ? true : false, //if true, cookie will be set on only on https  // not okey
         httpOnly: true,// if set to true, will not be accessible by js
         maxAge: 60 * 60 * 1000, // time limit on client side
-        // sameSite:process.env.PRODUCTION?"None":'lax',
-        sameSite: 'lax',
+        // sameSite: 'lax',
         path: "/"// cookie will be sent by the browser to the server for every request starting with preceded by path /
     }
 

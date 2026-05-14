@@ -23,6 +23,7 @@ const logout = asyncHandler(async (req, res) => {
 const getMe = asyncHandler(async (req, res) => {
   if (!req.session?.user) throw new AppError("Not authenticated", 401);
   const user = await User.findById(req.session.user.userId).select("-password -__v");
+  console.log(user);
   if (!user) throw new AppError("User not found", 404);
   res.status(200).json({
     success: true,
